@@ -34,13 +34,27 @@
     </script>
 
     <style>
-        /* Mobile Dynamic Viewport Fix (100dvh prevents browser toolbar from hiding bottom bar) */
+        /* Lock layout to exact mobile visible screen */
         html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
             height: 100%;
-            height: 100dvh;
-            min-height: -webkit-fill-available;
             overflow: hidden;
             overscroll-behavior: none;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        /* Fixed full-screen app shell that adapts to mobile browser toolbars */
+        #appShell {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         ::-webkit-scrollbar {
@@ -76,14 +90,14 @@
         }
 
         .glass-panel {
-            background: rgba(15, 23, 42, 0.88);
+            background: rgba(15, 23, 42, 0.92);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
         }
 
         /* Safe area padding for iPhone / Android gesture navigation bars */
         .safe-bottom-bar {
-            padding-bottom: calc(0.65rem + env(safe-area-inset-bottom, 0px));
+            padding-bottom: max(0.6rem, env(safe-area-inset-bottom, 0.6rem));
         }
 
         /* Rich AI Markdown Typography */
@@ -138,23 +152,25 @@
         }
     </style>
 </head>
-<body class="ambient-bg text-slate-100 font-sans antialiased flex flex-col overflow-hidden select-none sm:select-auto">
+<body class="ambient-bg text-slate-100 font-sans antialiased select-none sm:select-auto">
+
+<div id="appShell">
 
     <!-- SLEEK TOP HEADER -->
-    <header class="h-14 sm:h-16 border-b border-slate-800/80 glass-panel px-3 sm:px-8 flex items-center justify-between z-30 shrink-0">
+    <header class="h-12 sm:h-16 border-b border-slate-800/80 glass-panel px-2.5 sm:px-8 flex items-center justify-between z-30 shrink-0">
         <!-- Brand Identity -->
         <div class="flex items-center gap-2 sm:gap-3 cursor-pointer shrink-0" onclick="switchMainTab('chat')">
-            <div class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-500/25 via-cyan-500/20 to-slate-900 border border-amber-400/40 flex items-center justify-center shadow-lg shadow-amber-500/10">
-                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="relative w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-500/25 via-cyan-500/20 to-slate-900 border border-amber-400/40 flex items-center justify-center shadow-lg shadow-amber-500/10">
+                <svg class="w-4 h-4 sm:w-6 sm:h-6 text-amber-400" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="32" cy="32" r="26" stroke="currentColor" stroke-width="3.5"/>
                     <circle cx="32" cy="32" r="17" stroke="#38BDF8" stroke-width="2" stroke-dasharray="4 3"/>
                     <path d="M15 26H49M15 38H49M26 15V49M38 15V49" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
                 </svg>
-                <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-slate-950"></span>
+                <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-400 ring-2 ring-slate-950"></span>
             </div>
             <div>
                 <div class="flex items-center gap-1.5">
-                    <h1 class="font-extrabold text-sm sm:text-lg tracking-tight bg-gradient-to-r from-white via-amber-200 to-cyan-300 bg-clip-text text-transparent">
+                    <h1 class="font-extrabold text-xs sm:text-lg tracking-tight bg-gradient-to-r from-white via-amber-200 to-cyan-300 bg-clip-text text-transparent">
                         Qazaq Tarih AI
                     </h1>
                     <span class="hidden md:inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
@@ -167,11 +183,11 @@
 
         <!-- Center Navigation Switcher (AI Chat vs UBT Trainer) -->
         <div class="flex items-center bg-slate-900/90 p-0.5 sm:p-1 rounded-xl sm:rounded-2xl border border-slate-800">
-            <button id="tabBtnChat" onclick="switchMainTab('chat')" class="px-2.5 sm:px-3.5 py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold transition flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 shadow-sm">
+            <button id="tabBtnChat" onclick="switchMainTab('chat')" class="px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold transition flex items-center gap-1 bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 shadow-sm">
                 <i class="fa-solid fa-wand-magic-sparkles"></i>
                 <span>ИИ Сұхбат</span>
             </button>
-            <button id="tabBtnQuiz" onclick="switchMainTab('quiz')" class="px-2.5 sm:px-3.5 py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold transition flex items-center gap-1.5 text-slate-300 hover:text-white">
+            <button id="tabBtnQuiz" onclick="switchMainTab('quiz')" class="px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold transition flex items-center gap-1 text-slate-300 hover:text-white">
                 <i class="fa-solid fa-graduation-cap text-cyan-400"></i>
                 <span>ҰБТ Тренажер</span>
             </button>
@@ -179,7 +195,7 @@
 
         <!-- Right Quick Actions -->
         <div class="flex items-center gap-1.5 shrink-0">
-            <button onclick="resetNewChat()" title="Жаңа сұхбат бастау" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 text-slate-200 hover:text-amber-300 text-xs font-medium transition active:scale-95">
+            <button onclick="resetNewChat()" title="Жаңа сұхбат бастау" class="flex items-center gap-1 px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 text-slate-200 hover:text-amber-300 text-xs font-medium transition active:scale-95">
                 <i class="fa-solid fa-plus"></i>
                 <span class="hidden sm:inline">Жаңа чат</span>
             </button>
@@ -187,101 +203,101 @@
     </header>
 
     <!-- ======================================================================= -->
-    <!-- VIEW 1: SLEEK AI CHAT ASSISTANT (DEFAULT VIEW - MOBILE FIXED)           -->
+    <!-- VIEW 1: SLEEK AI CHAT ASSISTANT (FITS 100% ON MOBILE WITHOUT SCROLL)    -->
     <!-- ======================================================================= -->
-    <main id="chatView" class="flex-1 min-h-0 flex flex-col overflow-hidden relative">
+    <main id="chatView" class="flex-1 min-h-0 flex flex-col justify-between overflow-hidden relative">
 
-        <!-- Scrollable Chat Stream (min-h-0 ensures it never pushes input bar off screen) -->
-        <div id="chatScrollArea" class="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 sm:px-6 py-4 sm:py-6">
-            <div class="max-w-3xl mx-auto space-y-5 pb-2">
+        <!-- Scrollable Chat Stream -->
+        <div id="chatScrollArea" class="flex-1 min-h-0 overflow-y-auto overscroll-contain px-2.5 sm:px-6 py-2 sm:py-6">
+            <div class="max-w-3xl mx-auto space-y-3 sm:space-y-5">
 
-                <!-- HERO WELCOME SCREEN (Shown when chat is empty) -->
-                <div id="heroWelcome" class="pt-1 sm:pt-5 pb-2 space-y-4 sm:space-y-6">
+                <!-- HERO WELCOME SCREEN (Ultra-compact on mobile so bottom bar is immediately visible) -->
+                <div id="heroWelcome" class="pt-0.5 sm:pt-4 pb-1 space-y-2.5 sm:space-y-6">
                     <!-- Center Emblem & Greeting -->
-                    <div class="text-center space-y-2 sm:space-y-3">
-                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] sm:text-xs font-medium animate-float">
+                    <div class="text-center space-y-1 sm:space-y-3">
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] sm:text-xs font-medium">
                             <i class="fa-solid fa-sparkles"></i>
                             <span>Сақ-Ғұн дәуірінен Тәуелсіз Қазақстанға дейін</span>
                         </div>
-                        <h2 class="text-2xl sm:text-5xl font-bold text-white tracking-tight leading-tight px-1" style="font-family: 'Times New Roman', Times, serif;">
+                        <h2 class="text-xl sm:text-5xl font-bold text-white tracking-tight leading-snug sm:leading-tight px-1" style="font-family: 'Times New Roman', Times, serif;">
                             Қазақстан тарихы бойынша <br class="hidden sm:inline">
                             <span class="bg-gradient-to-r from-amber-300 via-amber-400 to-cyan-400 bg-clip-text text-transparent">кез келген сұрағыңызды қойыңыз</span>
                         </h2>
-                        <p class="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto leading-relaxed px-2">
-                            Тарихи оқиғалар, хандар мен батырлар, Алаш қозғалысы, ХХ ғасыр кезеңдері, маңызды даталар және ҰБТ сұрақтарына лезде жауап беремін.
+                        <p class="text-[11px] sm:text-sm text-slate-400 max-w-xl mx-auto leading-snug sm:leading-relaxed px-2">
+                            Хандар мен батырлар, Алаш қозғалысы, ХХ ғасыр кезеңдері, даталар және ҰБТ сұрақтарына лезде жауап беремін.
                         </p>
                     </div>
 
-                    <!-- Historical Era Selector Tabs (Horizontal Scroll on Mobile for compactness) -->
-                    <div class="space-y-2.5 sm:space-y-3">
-                        <div class="flex items-center sm:justify-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1 -mx-1 px-1">
-                            <button onclick="selectEraTab('ancient')" id="era-ancient" class="era-tab shrink-0 px-3 py-2 rounded-xl text-xs font-semibold transition border bg-amber-500/15 border-amber-500/50 text-amber-300">
-                                🏹 Ежелгі және Түркі дәуірі
+                    <!-- Historical Era Selector Tabs -->
+                    <div class="space-y-2 sm:space-y-3">
+                        <div class="flex items-center sm:justify-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-0.5">
+                            <button onclick="selectEraTab('ancient')" id="era-ancient" class="era-tab shrink-0 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-[11px] sm:text-xs font-semibold transition border bg-amber-500/15 border-amber-500/50 text-amber-300">
+                                🏹 Ежелгі/Түркі
                             </button>
-                            <button onclick="selectEraTab('khanate')" id="era-khanate" class="era-tab shrink-0 px-3 py-2 rounded-xl text-xs font-semibold transition border bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700">
+                            <button onclick="selectEraTab('khanate')" id="era-khanate" class="era-tab shrink-0 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-[11px] sm:text-xs font-semibold transition border bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700">
                                 👑 Қазақ хандығы
                             </button>
-                            <button onclick="selectEraTab('xxcentury')" id="era-xxcentury" class="era-tab shrink-0 px-3 py-2 rounded-xl text-xs font-semibold transition border bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700">
-                                📜 ХХ ғасыр және Алаш
+                            <button onclick="selectEraTab('xxcentury')" id="era-xxcentury" class="era-tab shrink-0 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-[11px] sm:text-xs font-semibold transition border bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700">
+                                📜 ХХ ғ. және Алаш
                             </button>
-                            <button onclick="selectEraTab('modern')" id="era-modern" class="era-tab shrink-0 px-3 py-2 rounded-xl text-xs font-semibold transition border bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700">
-                                🦅 Тәуелсіз Қазақстан
+                            <button onclick="selectEraTab('modern')" id="era-modern" class="era-tab shrink-0 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-[11px] sm:text-xs font-semibold transition border bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700">
+                                🦅 Тәуелсіздік
                             </button>
                         </div>
 
-                        <!-- Dynamic 4 Prompt Cards Grid -->
-                        <div id="eraPromptsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
+                        <!-- Dynamic 4 Prompt Cards Grid (2x2 on mobile so it takes half the vertical space!) -->
+                        <div id="eraPromptsGrid" class="grid grid-cols-2 gap-1.5 sm:gap-2.5">
                             <!-- Populated by JS -->
                         </div>
                     </div>
                 </div>
 
                 <!-- Dynamic Conversation Stream -->
-                <div id="messagesStream" class="space-y-4 sm:space-y-5"></div>
+                <div id="messagesStream" class="space-y-3.5 sm:space-y-5 pb-2"></div>
 
             </div>
         </div>
 
-        <!-- BOTTOM PINNED INPUT BAR (Always visible & tappable on mobile phones) -->
-        <div class="border-t border-slate-800/90 glass-panel px-3 pt-2.5 sm:px-6 sm:pt-3.5 safe-bottom-bar shrink-0 z-30 w-full shadow-2xl">
-            <div class="max-w-3xl mx-auto space-y-2">
+        <!-- BOTTOM PINNED INPUT BAR (Locked inside #appShell so it NEVER goes off-screen) -->
+        <div id="bottomInputBar" class="border-t border-slate-800/90 glass-panel px-2.5 pt-2 sm:px-6 sm:pt-3 safe-bottom-bar shrink-0 z-40 w-full shadow-2xl">
+            <div class="max-w-3xl mx-auto space-y-1.5 sm:space-y-2">
 
                 <!-- Response Style Mode Selector -->
-                <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
-                    <span class="text-[11px] text-slate-400 mr-0.5 shrink-0 flex items-center gap-1">
+                <div class="flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar">
+                    <span class="text-[10px] sm:text-[11px] text-slate-400 mr-0.5 shrink-0 flex items-center gap-1">
                         <i class="fa-solid fa-sliders text-amber-400"></i> Формат:
                     </span>
-                    <button type="button" onclick="setResponseMode('full')" id="mode-full" class="mode-chip px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/40 shrink-0 transition">
+                    <button type="button" onclick="setResponseMode('full')" id="mode-full" class="mode-chip px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/40 shrink-0 transition">
                         ✨ Толық жауап
                     </button>
-                    <button type="button" onclick="setResponseMode('summary')" id="mode-summary" class="mode-chip px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-medium bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700 shrink-0 transition">
+                    <button type="button" onclick="setResponseMode('summary')" id="mode-summary" class="mode-chip px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700 shrink-0 transition">
                         📝 Қысқаша конспект
                     </button>
-                    <button type="button" onclick="setResponseMode('dates')" id="mode-dates" class="mode-chip px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-medium bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700 shrink-0 transition">
+                    <button type="button" onclick="setResponseMode('dates')" id="mode-dates" class="mode-chip px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700 shrink-0 transition">
                         📅 Даталар мен тұлғалар
                     </button>
-                    <button type="button" onclick="setResponseMode('quiz')" id="mode-quiz" class="mode-chip px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-medium bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700 shrink-0 transition">
+                    <button type="button" onclick="setResponseMode('quiz')" id="mode-quiz" class="mode-chip px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700 shrink-0 transition">
                         🎯 5 ҰБТ тест
                     </button>
                 </div>
 
                 <!-- Input Box Form -->
-                <form onsubmit="submitUserQuestion(event)" class="relative flex items-end gap-2">
+                <form onsubmit="submitUserQuestion(event)" class="relative flex items-end gap-1.5 sm:gap-2">
                     <div class="relative flex-1 bg-slate-950 border border-slate-700 focus-within:border-amber-400 rounded-2xl flex items-end transition shadow-inner">
                         <textarea id="questionInput" rows="1"
                             placeholder="Сұрағыңызды осында жазыңыз..."
                             onfocus="handleMobileInputFocus()"
                             onkeydown="handleInputKeydown(event)"
                             oninput="autoGrow(this)"
-                            class="w-full bg-transparent pl-3.5 pr-2 py-2.5 sm:py-3 text-sm sm:text-base text-white placeholder-slate-400 focus:outline-none resize-none max-h-28 leading-snug select-text"></textarea>
+                            class="w-full bg-transparent pl-3 pr-1.5 py-2 sm:py-3 text-sm sm:text-base text-white placeholder-slate-400 focus:outline-none resize-none max-h-24 leading-snug select-text"></textarea>
 
                         <!-- Voice Input Button -->
-                        <button type="button" id="voiceBtn" onclick="toggleVoiceInput()" title="Дауыспен сұрау" class="p-2.5 sm:p-3 text-slate-400 hover:text-amber-400 transition shrink-0">
-                            <i class="fa-solid fa-microphone"></i>
+                        <button type="button" id="voiceBtn" onclick="toggleVoiceInput()" title="Дауыспен сұрау" class="p-2 sm:p-3 text-slate-400 hover:text-amber-400 transition shrink-0">
+                            <i class="fa-solid fa-microphone text-xs sm:text-sm"></i>
                         </button>
                     </div>
 
-                    <button id="sendBtn" type="submit" class="h-11 px-4 sm:px-5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-lg shadow-amber-500/20 active:scale-95 transition shrink-0">
+                    <button id="sendBtn" type="submit" class="h-10 sm:h-11 px-3.5 sm:px-5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-lg shadow-amber-500/20 active:scale-95 transition shrink-0">
                         <span>Сұрау</span>
                         <i class="fa-solid fa-paper-plane text-xs"></i>
                     </button>
@@ -324,6 +340,8 @@
             <div id="quizCardsContainer" class="space-y-4 pb-8"></div>
         </div>
     </section>
+
+</div><!-- End #appShell -->
 
     <script>
         /**************************************************************************
@@ -878,7 +896,20 @@
         /**************************************************************************
          * 5. INITIALIZATION & UI CONTROLS
          **************************************************************************/
+        function syncMobileViewportHeight() {
+            const shell = document.getElementById("appShell");
+            if (!shell) return;
+            const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+            shell.style.height = vh + "px";
+        }
+
         window.addEventListener("DOMContentLoaded", () => {
+            syncMobileViewportHeight();
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener("resize", syncMobileViewportHeight);
+            }
+            window.addEventListener("resize", syncMobileViewportHeight);
+
             selectEraTab("ancient");
             loadRandomQuizSet();
 
@@ -891,10 +922,11 @@
         });
 
         function handleMobileInputFocus() {
-            // When mobile keyboard opens, scroll smoothly so input and latest message are visible
+            // When mobile keyboard opens, resize shell and scroll smoothly
             setTimeout(() => {
+                syncMobileViewportHeight();
                 scrollChatToBottom();
-            }, 250);
+            }, 200);
         }
 
         function switchMainTab(tab) {
@@ -919,23 +951,23 @@
         function selectEraTab(eraKey) {
             activeEra = eraKey;
             document.querySelectorAll(".era-tab").forEach(btn => {
-                btn.className = "era-tab shrink-0 px-3 py-2 rounded-xl text-xs font-semibold transition border bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700";
+                btn.className = "era-tab shrink-0 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-[11px] sm:text-xs font-semibold transition border bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700";
             });
             const activeBtn = document.getElementById(`era-${eraKey}`);
             if (activeBtn) {
-                activeBtn.className = "era-tab shrink-0 px-3 py-2 rounded-xl text-xs font-semibold transition border bg-amber-500/15 border-amber-500/50 text-amber-300 shadow-sm";
+                activeBtn.className = "era-tab shrink-0 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-[11px] sm:text-xs font-semibold transition border bg-amber-500/15 border-amber-500/50 text-amber-300 shadow-sm";
             }
 
             const prompts = ERA_PROMPTS[eraKey] || ERA_PROMPTS.ancient;
             const grid = document.getElementById("eraPromptsGrid");
             grid.innerHTML = prompts.map((item) => `
                 <button type="button" onclick="askSuggestedPrompt('${escapeQuotes(item.question)}')"
-                    class="text-left p-3.5 sm:p-4 rounded-2xl bg-slate-900/80 hover:bg-slate-900 border border-slate-800/90 hover:border-amber-500/40 active:scale-[0.99] transition group flex flex-col justify-between gap-1.5 shadow-sm">
-                    <div class="flex items-center justify-between">
-                        <span class="text-[11px] font-bold text-cyan-400 tracking-wide">${item.badge}</span>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-500 group-hover:text-amber-400 transition"></i>
+                    class="text-left p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-900/80 hover:bg-slate-900 border border-slate-800/90 hover:border-amber-500/40 active:scale-[0.99] transition group flex flex-col justify-between gap-1 shadow-sm">
+                    <div class="flex items-center justify-between gap-1">
+                        <span class="text-[10px] sm:text-[11px] font-bold text-cyan-400 tracking-wide truncate">${item.badge}</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[9px] sm:text-[10px] text-slate-500 group-hover:text-amber-400 transition shrink-0"></i>
                     </div>
-                    <p class="text-xs sm:text-sm font-medium text-slate-200 group-hover:text-white leading-snug line-clamp-2">${item.question}</p>
+                    <p class="text-[11px] sm:text-sm font-medium text-slate-200 group-hover:text-white leading-snug line-clamp-2">${item.question}</p>
                 </button>
             `).join('');
         }
@@ -943,11 +975,11 @@
         function setResponseMode(mode) {
             responseMode = mode;
             document.querySelectorAll(".mode-chip").forEach(btn => {
-                btn.className = "mode-chip px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-medium bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700 shrink-0 transition";
+                btn.className = "mode-chip px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700 shrink-0 transition";
             });
             const active = document.getElementById(`mode-${mode}`);
             if (active) {
-                active.className = "mode-chip px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/40 shrink-0 transition";
+                active.className = "mode-chip px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/40 shrink-0 transition";
             }
         }
 
