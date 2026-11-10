@@ -2,7 +2,7 @@
 <html lang="kk" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Qazaq Tarih AI — Қазақстан Тарихы Зияткерлік ИИ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,6 +34,15 @@
     </script>
 
     <style>
+        /* Mobile Dynamic Viewport Fix (100dvh prevents browser toolbar from hiding bottom bar) */
+        html, body {
+            height: 100%;
+            height: 100dvh;
+            min-height: -webkit-fill-available;
+            overflow: hidden;
+            overscroll-behavior: none;
+        }
+
         ::-webkit-scrollbar {
             width: 5px;
             height: 5px;
@@ -67,18 +76,23 @@
         }
 
         .glass-panel {
-            background: rgba(15, 23, 42, 0.72);
+            background: rgba(15, 23, 42, 0.88);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
+        }
+
+        /* Safe area padding for iPhone / Android gesture navigation bars */
+        .safe-bottom-bar {
+            padding-bottom: calc(0.65rem + env(safe-area-inset-bottom, 0px));
         }
 
         /* Rich AI Markdown Typography */
         .ai-prose h3 {
             color: #FCD34D;
             font-weight: 700;
-            font-size: 1.05rem;
-            margin-top: 0.9rem;
-            margin-bottom: 0.45rem;
+            font-size: 1.02rem;
+            margin-top: 0.85rem;
+            margin-bottom: 0.4rem;
             display: flex;
             align-items: center;
             gap: 0.4rem;
@@ -92,13 +106,13 @@
         }
         .ai-prose ul {
             list-style-type: none;
-            padding-left: 0.25rem;
-            margin-top: 0.45rem;
-            margin-bottom: 0.75rem;
+            padding-left: 0.2rem;
+            margin-top: 0.4rem;
+            margin-bottom: 0.7rem;
         }
         .ai-prose li {
             position: relative;
-            padding-left: 1.25rem;
+            padding-left: 1.15rem;
             margin-bottom: 0.35rem;
             line-height: 1.6;
         }
@@ -111,62 +125,61 @@
             color: #F59E0B;
         }
         .ai-prose p {
-            margin-bottom: 0.65rem;
-            line-height: 1.68;
+            margin-bottom: 0.6rem;
+            line-height: 1.65;
         }
 
         @keyframes floatSlow {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-4px); }
+            50% { transform: translateY(-3px); }
         }
         .animate-float {
             animation: floatSlow 4s ease-in-out infinite;
         }
     </style>
 </head>
-<body class="ambient-bg text-slate-100 font-sans antialiased h-screen flex flex-col overflow-hidden">
+<body class="ambient-bg text-slate-100 font-sans antialiased flex flex-col overflow-hidden select-none sm:select-auto">
 
     <!-- SLEEK TOP HEADER -->
-    <header class="h-16 border-b border-slate-800/80 glass-panel px-4 sm:px-8 flex items-center justify-between z-30 shrink-0">
+    <header class="h-14 sm:h-16 border-b border-slate-800/80 glass-panel px-3 sm:px-8 flex items-center justify-between z-30 shrink-0">
         <!-- Brand Identity -->
-        <div class="flex items-center gap-3 cursor-pointer" onclick="switchMainTab('chat')">
-            <div class="relative w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-500/25 via-cyan-500/20 to-slate-900 border border-amber-400/40 flex items-center justify-center shadow-lg shadow-amber-500/10">
-                <!-- Kazakh Shanyrak & AI Sparkle SVG -->
-                <svg class="w-6 h-6 text-amber-400" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div class="flex items-center gap-2 sm:gap-3 cursor-pointer shrink-0" onclick="switchMainTab('chat')">
+            <div class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-500/25 via-cyan-500/20 to-slate-900 border border-amber-400/40 flex items-center justify-center shadow-lg shadow-amber-500/10">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="32" cy="32" r="26" stroke="currentColor" stroke-width="3.5"/>
                     <circle cx="32" cy="32" r="17" stroke="#38BDF8" stroke-width="2" stroke-dasharray="4 3"/>
                     <path d="M15 26H49M15 38H49M26 15V49M38 15V49" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
                 </svg>
-                <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-slate-950"></span>
+                <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-slate-950"></span>
             </div>
             <div>
-                <div class="flex items-center gap-2">
-                    <h1 class="font-extrabold text-base sm:text-lg tracking-tight bg-gradient-to-r from-white via-amber-200 to-cyan-300 bg-clip-text text-transparent">
+                <div class="flex items-center gap-1.5">
+                    <h1 class="font-extrabold text-sm sm:text-lg tracking-tight bg-gradient-to-r from-white via-amber-200 to-cyan-300 bg-clip-text text-transparent">
                         Qazaq Tarih AI
                     </h1>
                     <span class="hidden md:inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
                         24/7 Шектеусіз
                     </span>
                 </div>
-                <p class="text-[11px] text-slate-400 hidden sm:block">Қазақстан тарихының зияткерлік нейрожелісі</p>
+                <p class="text-[10px] sm:text-[11px] text-slate-400 hidden sm:block">Қазақстан тарихының зияткерлік нейрожелісі</p>
             </div>
         </div>
 
         <!-- Center Navigation Switcher (AI Chat vs UBT Trainer) -->
-        <div class="flex items-center bg-slate-900/90 p-1 rounded-2xl border border-slate-800">
-            <button id="tabBtnChat" onclick="switchMainTab('chat')" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 shadow-sm">
+        <div class="flex items-center bg-slate-900/90 p-0.5 sm:p-1 rounded-xl sm:rounded-2xl border border-slate-800">
+            <button id="tabBtnChat" onclick="switchMainTab('chat')" class="px-2.5 sm:px-3.5 py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold transition flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 shadow-sm">
                 <i class="fa-solid fa-wand-magic-sparkles"></i>
                 <span>ИИ Сұхбат</span>
             </button>
-            <button id="tabBtnQuiz" onclick="switchMainTab('quiz')" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 text-slate-300 hover:text-white">
+            <button id="tabBtnQuiz" onclick="switchMainTab('quiz')" class="px-2.5 sm:px-3.5 py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold transition flex items-center gap-1.5 text-slate-300 hover:text-white">
                 <i class="fa-solid fa-graduation-cap text-cyan-400"></i>
                 <span>ҰБТ Тренажер</span>
             </button>
         </div>
 
         <!-- Right Quick Actions -->
-        <div class="flex items-center gap-2">
-            <button onclick="resetNewChat()" title="Жаңа сұхбат бастау" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 text-slate-200 hover:text-amber-300 text-xs font-medium transition active:scale-95">
+        <div class="flex items-center gap-1.5 shrink-0">
+            <button onclick="resetNewChat()" title="Жаңа сұхбат бастау" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 text-slate-200 hover:text-amber-300 text-xs font-medium transition active:scale-95">
                 <i class="fa-solid fa-plus"></i>
                 <span class="hidden sm:inline">Жаңа чат</span>
             </button>
@@ -174,102 +187,103 @@
     </header>
 
     <!-- ======================================================================= -->
-    <!-- VIEW 1: SLEEK AI CHAT ASSISTANT (DEFAULT VIEW)                          -->
+    <!-- VIEW 1: SLEEK AI CHAT ASSISTANT (DEFAULT VIEW - MOBILE FIXED)           -->
     <!-- ======================================================================= -->
-    <main id="chatView" class="flex-1 flex flex-col h-full overflow-hidden relative">
+    <main id="chatView" class="flex-1 min-h-0 flex flex-col overflow-hidden relative">
 
-        <!-- Scrollable Chat Stream -->
-        <div id="chatScrollArea" class="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
-            <div class="max-w-3xl mx-auto space-y-6">
+        <!-- Scrollable Chat Stream (min-h-0 ensures it never pushes input bar off screen) -->
+        <div id="chatScrollArea" class="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 sm:px-6 py-4 sm:py-6">
+            <div class="max-w-3xl mx-auto space-y-5 pb-2">
 
                 <!-- HERO WELCOME SCREEN (Shown when chat is empty) -->
-                <div id="heroWelcome" class="pt-2 sm:pt-6 pb-4 space-y-6">
+                <div id="heroWelcome" class="pt-1 sm:pt-5 pb-2 space-y-4 sm:space-y-6">
                     <!-- Center Emblem & Greeting -->
-                    <div class="text-center space-y-3">
-                        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-medium animate-float">
+                    <div class="text-center space-y-2 sm:space-y-3">
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] sm:text-xs font-medium animate-float">
                             <i class="fa-solid fa-sparkles"></i>
                             <span>Сақ-Ғұн дәуірінен Тәуелсіз Қазақстанға дейін</span>
                         </div>
-                        <h2 class="text-3xl sm:text-5xl font-bold text-white tracking-tight leading-tight" style="font-family: 'Times New Roman', Times, serif;">
+                        <h2 class="text-2xl sm:text-5xl font-bold text-white tracking-tight leading-tight px-1" style="font-family: 'Times New Roman', Times, serif;">
                             Қазақстан тарихы бойынша <br class="hidden sm:inline">
                             <span class="bg-gradient-to-r from-amber-300 via-amber-400 to-cyan-400 bg-clip-text text-transparent">кез келген сұрағыңызды қойыңыз</span>
                         </h2>
-                        <p class="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
+                        <p class="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto leading-relaxed px-2">
                             Тарихи оқиғалар, хандар мен батырлар, Алаш қозғалысы, ХХ ғасыр кезеңдері, маңызды даталар және ҰБТ сұрақтарына лезде жауап беремін.
                         </p>
                     </div>
 
-                    <!-- Historical Era Selector Tabs (Dynamic Prompt Suggestions) -->
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
-                            <button onclick="selectEraTab('ancient')" id="era-ancient" class="era-tab px-3.5 py-2 rounded-xl text-xs font-semibold transition border bg-amber-500/15 border-amber-500/50 text-amber-300">
+                    <!-- Historical Era Selector Tabs (Horizontal Scroll on Mobile for compactness) -->
+                    <div class="space-y-2.5 sm:space-y-3">
+                        <div class="flex items-center sm:justify-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1 -mx-1 px-1">
+                            <button onclick="selectEraTab('ancient')" id="era-ancient" class="era-tab shrink-0 px-3 py-2 rounded-xl text-xs font-semibold transition border bg-amber-500/15 border-amber-500/50 text-amber-300">
                                 🏹 Ежелгі және Түркі дәуірі
                             </button>
-                            <button onclick="selectEraTab('khanate')" id="era-khanate" class="era-tab px-3.5 py-2 rounded-xl text-xs font-semibold transition border bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700">
+                            <button onclick="selectEraTab('khanate')" id="era-khanate" class="era-tab shrink-0 px-3 py-2 rounded-xl text-xs font-semibold transition border bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700">
                                 👑 Қазақ хандығы
                             </button>
-                            <button onclick="selectEraTab('xxcentury')" id="era-xxcentury" class="era-tab px-3.5 py-2 rounded-xl text-xs font-semibold transition border bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700">
+                            <button onclick="selectEraTab('xxcentury')" id="era-xxcentury" class="era-tab shrink-0 px-3 py-2 rounded-xl text-xs font-semibold transition border bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700">
                                 📜 ХХ ғасыр және Алаш
                             </button>
-                            <button onclick="selectEraTab('modern')" id="era-modern" class="era-tab px-3.5 py-2 rounded-xl text-xs font-semibold transition border bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700">
+                            <button onclick="selectEraTab('modern')" id="era-modern" class="era-tab shrink-0 px-3 py-2 rounded-xl text-xs font-semibold transition border bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700">
                                 🦅 Тәуелсіз Қазақстан
                             </button>
                         </div>
 
                         <!-- Dynamic 4 Prompt Cards Grid -->
-                        <div id="eraPromptsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                        <div id="eraPromptsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
                             <!-- Populated by JS -->
                         </div>
                     </div>
                 </div>
 
                 <!-- Dynamic Conversation Stream -->
-                <div id="messagesStream" class="space-y-5"></div>
+                <div id="messagesStream" class="space-y-4 sm:space-y-5"></div>
 
             </div>
         </div>
 
-        <!-- BOTTOM FLOATING INPUT BAR -->
-        <div class="border-t border-slate-800/80 glass-panel p-3 sm:px-6 sm:py-4 shrink-0 z-20">
-            <div class="max-w-3xl mx-auto space-y-2.5">
+        <!-- BOTTOM PINNED INPUT BAR (Always visible & tappable on mobile phones) -->
+        <div class="border-t border-slate-800/90 glass-panel px-3 pt-2.5 sm:px-6 sm:pt-3.5 safe-bottom-bar shrink-0 z-30 w-full shadow-2xl">
+            <div class="max-w-3xl mx-auto space-y-2">
 
                 <!-- Response Style Mode Selector -->
-                <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-                    <span class="text-[11px] text-slate-400 mr-1 shrink-0 flex items-center gap-1">
+                <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
+                    <span class="text-[11px] text-slate-400 mr-0.5 shrink-0 flex items-center gap-1">
                         <i class="fa-solid fa-sliders text-amber-400"></i> Формат:
                     </span>
-                    <button onclick="setResponseMode('full')" id="mode-full" class="mode-chip px-3 py-1 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/40 shrink-0 transition">
+                    <button type="button" onclick="setResponseMode('full')" id="mode-full" class="mode-chip px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/40 shrink-0 transition">
                         ✨ Толық жауап
                     </button>
-                    <button onclick="setResponseMode('summary')" id="mode-summary" class="mode-chip px-3 py-1 rounded-full text-xs font-medium bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700 shrink-0 transition">
+                    <button type="button" onclick="setResponseMode('summary')" id="mode-summary" class="mode-chip px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-medium bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700 shrink-0 transition">
                         📝 Қысқаша конспект
                     </button>
-                    <button onclick="setResponseMode('dates')" id="mode-dates" class="mode-chip px-3 py-1 rounded-full text-xs font-medium bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700 shrink-0 transition">
+                    <button type="button" onclick="setResponseMode('dates')" id="mode-dates" class="mode-chip px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-medium bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700 shrink-0 transition">
                         📅 Даталар мен тұлғалар
                     </button>
-                    <button onclick="setResponseMode('quiz')" id="mode-quiz" class="mode-chip px-3 py-1 rounded-full text-xs font-medium bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700 shrink-0 transition">
-                        🎯 5 ҰБТ тест жасау
+                    <button type="button" onclick="setResponseMode('quiz')" id="mode-quiz" class="mode-chip px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-medium bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700 shrink-0 transition">
+                        🎯 5 ҰБТ тест
                     </button>
                 </div>
 
-                <!-- Input Box -->
+                <!-- Input Box Form -->
                 <form onsubmit="submitUserQuestion(event)" class="relative flex items-end gap-2">
-                    <div class="relative flex-1 bg-slate-950/90 border border-slate-700/90 focus-within:border-amber-400/80 rounded-2xl flex items-end transition shadow-inner">
+                    <div class="relative flex-1 bg-slate-950 border border-slate-700 focus-within:border-amber-400 rounded-2xl flex items-end transition shadow-inner">
                         <textarea id="questionInput" rows="1"
-                            placeholder="Қазақстан тарихы бойынша кез келген сұрақты жазыңыз..."
+                            placeholder="Сұрағыңызды осында жазыңыз..."
+                            onfocus="handleMobileInputFocus()"
                             onkeydown="handleInputKeydown(event)"
                             oninput="autoGrow(this)"
-                            class="w-full bg-transparent pl-4 pr-2 py-3 text-sm text-white placeholder-slate-400 focus:outline-none resize-none max-h-36 leading-relaxed"></textarea>
+                            class="w-full bg-transparent pl-3.5 pr-2 py-2.5 sm:py-3 text-sm sm:text-base text-white placeholder-slate-400 focus:outline-none resize-none max-h-28 leading-snug select-text"></textarea>
 
                         <!-- Voice Input Button -->
-                        <button type="button" id="voiceBtn" onclick="toggleVoiceInput()" title="Дауыспен сұрау" class="p-3 text-slate-400 hover:text-amber-400 transition shrink-0">
+                        <button type="button" id="voiceBtn" onclick="toggleVoiceInput()" title="Дауыспен сұрау" class="p-2.5 sm:p-3 text-slate-400 hover:text-amber-400 transition shrink-0">
                             <i class="fa-solid fa-microphone"></i>
                         </button>
                     </div>
 
-                    <button id="sendBtn" type="submit" class="h-11 px-5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition shrink-0">
-                        <span class="hidden sm:inline">Сұрау</span>
-                        <i class="fa-solid fa-paper-plane"></i>
+                    <button id="sendBtn" type="submit" class="h-11 px-4 sm:px-5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-lg shadow-amber-500/20 active:scale-95 transition shrink-0">
+                        <span>Сұрау</span>
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
                     </button>
                 </form>
             </div>
@@ -279,20 +293,20 @@
     <!-- ======================================================================= -->
     <!-- VIEW 2: INTERACTIVE UBT QUIZ TRAINER                                    -->
     <!-- ======================================================================= -->
-    <section id="quizView" class="hidden flex-1 overflow-y-auto px-4 sm:px-6 py-6">
-        <div class="max-w-3xl mx-auto space-y-6">
+    <section id="quizView" class="hidden flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 sm:px-6 py-4 sm:py-6">
+        <div class="max-w-3xl mx-auto space-y-5 pb-10">
             <!-- Quiz Header Card -->
-            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <span class="text-[11px] font-bold uppercase tracking-wider text-cyan-400">ҰБТ Интерактивті Тренажері</span>
-                    <h2 class="text-lg sm:text-xl font-bold text-white mt-0.5">Қазақстан тарихынан біліміңізді тексеріңіз</h2>
+                    <h2 class="text-base sm:text-xl font-bold text-white mt-0.5">Қазақстан тарихынан біліміңізді тексеріңіз</h2>
                     <p class="text-xs text-slate-400 mt-1">Ежелгі дәуірден ХХІ ғасырға дейінгі сұрақтар немесе ИИ генерациялайтын жаңа тесттер</p>
                 </div>
                 <div class="flex items-center gap-2 shrink-0">
-                    <button onclick="loadRandomQuizSet()" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 transition flex items-center gap-1.5">
+                    <button onclick="loadRandomQuizSet()" class="flex-1 sm:flex-initial justify-center px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 transition flex items-center gap-1.5">
                         <i class="fa-solid fa-shuffle text-cyan-400"></i> Жаңа 5 сұрақ
                     </button>
-                    <button onclick="generateCustomAIQuiz()" class="px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 text-xs font-bold transition flex items-center gap-1.5 shadow-md">
+                    <button onclick="generateCustomAIQuiz()" class="flex-1 sm:flex-initial justify-center px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 text-xs font-bold transition flex items-center gap-1.5 shadow-md">
                         <i class="fa-solid fa-wand-magic-sparkles"></i> ИИ Тест
                     </button>
                 </div>
@@ -403,8 +417,6 @@
 
         /**************************************************************************
          * 3. COMPREHENSIVE BUILT-IN KAZAKHSTAN HISTORY KNOWLEDGE ENGINE
-         * Covers Ancient, Medieval, Kazakh Khanate, AND all 21 Curriculum Topics
-         * by default so the AI works 24/7 with zero interruptions!
          **************************************************************************/
         const BUILTIN_KNOWLEDGE_BASE = [
             {
@@ -700,7 +712,7 @@
 - **«Невада–Семей» қозғалысы (1989 ж. ақпан):** Ядролық сынақтарға қарсы экологиялық қозғалыс (О. Сүлейменов).
 - **«Қазақ тілі» халықаралық қоғамы (1989 ж. қазан):** Тұңғыш президенті — академик **Әбдуәли Қайдар**.
 - **«Азат» азаматтық қозғалысы (1990 ж. шілде):** Мемлекеттік егемендікті талап еткен ұйым (С. Ақатаев, М. Есеналиев).
-- **Қазақстан халқы Ассамблеясы (ҚХА — 1995 ж. 1 наурыз):** Этносаралық татулық пен бірлікті нығайтушы институт.
+- **Қазақстан халқы Ассамблеясы (ҚХА — 1995 ж. 1 науз):** Этносаралық татулық пен бірлікті нығайтушы институт.
 - **Ұлттық құрылтай (2022 ж. маусым):** Қоғамдық диалогты дамытатын консультативтік-кеңесші орган.`,
                 followUps: ["Мемлекеттік рәміздер мен Конституция тарихы", "Қазақстанның БҰҰ мен ЕҚЫҰ-дағы рөлі", "ҰБТ Тренажерінде білімді тексеру"]
             },
@@ -869,7 +881,21 @@
         window.addEventListener("DOMContentLoaded", () => {
             selectEraTab("ancient");
             loadRandomQuizSet();
+
+            // Support deep linking via ?topic=1..21 if opened from mobile app
+            const params = new URLSearchParams(window.location.search);
+            const topicParam = params.get("topic");
+            if (topicParam) {
+                askSuggestedPrompt(topicParam);
+            }
         });
+
+        function handleMobileInputFocus() {
+            // When mobile keyboard opens, scroll smoothly so input and latest message are visible
+            setTimeout(() => {
+                scrollChatToBottom();
+            }, 250);
+        }
 
         function switchMainTab(tab) {
             const chatView = document.getElementById("chatView");
@@ -880,34 +906,34 @@
             if (tab === "chat") {
                 chatView.classList.remove("hidden");
                 quizView.classList.add("hidden");
-                btnChat.className = "px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 shadow-sm";
-                btnQuiz.className = "px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 text-slate-300 hover:text-white";
+                btnChat.className = "px-2.5 sm:px-3.5 py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold transition flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 shadow-sm";
+                btnQuiz.className = "px-2.5 sm:px-3.5 py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold transition flex items-center gap-1.5 text-slate-300 hover:text-white";
             } else {
                 chatView.classList.add("hidden");
                 quizView.classList.remove("hidden");
-                btnQuiz.className = "px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 bg-gradient-to-r from-cyan-500 to-cyan-400 text-slate-950 shadow-sm";
-                btnChat.className = "px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 text-slate-300 hover:text-white";
+                btnQuiz.className = "px-2.5 sm:px-3.5 py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold transition flex items-center gap-1.5 bg-gradient-to-r from-cyan-500 to-cyan-400 text-slate-950 shadow-sm";
+                btnChat.className = "px-2.5 sm:px-3.5 py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold transition flex items-center gap-1.5 text-slate-300 hover:text-white";
             }
         }
 
         function selectEraTab(eraKey) {
             activeEra = eraKey;
             document.querySelectorAll(".era-tab").forEach(btn => {
-                btn.className = "era-tab px-3.5 py-2 rounded-xl text-xs font-semibold transition border bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700";
+                btn.className = "era-tab shrink-0 px-3 py-2 rounded-xl text-xs font-semibold transition border bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700";
             });
             const activeBtn = document.getElementById(`era-${eraKey}`);
             if (activeBtn) {
-                activeBtn.className = "era-tab px-3.5 py-2 rounded-xl text-xs font-semibold transition border bg-amber-500/15 border-amber-500/50 text-amber-300 shadow-sm";
+                activeBtn.className = "era-tab shrink-0 px-3 py-2 rounded-xl text-xs font-semibold transition border bg-amber-500/15 border-amber-500/50 text-amber-300 shadow-sm";
             }
 
             const prompts = ERA_PROMPTS[eraKey] || ERA_PROMPTS.ancient;
             const grid = document.getElementById("eraPromptsGrid");
-            grid.innerHTML = prompts.map((item, idx) => `
-                <button onclick="askSuggestedPrompt('${escapeQuotes(item.question)}')"
-                    class="text-left p-4 rounded-2xl bg-slate-900/75 hover:bg-slate-900 border border-slate-800/90 hover:border-amber-500/40 transition group flex flex-col justify-between gap-2 shadow-sm">
+            grid.innerHTML = prompts.map((item) => `
+                <button type="button" onclick="askSuggestedPrompt('${escapeQuotes(item.question)}')"
+                    class="text-left p-3.5 sm:p-4 rounded-2xl bg-slate-900/80 hover:bg-slate-900 border border-slate-800/90 hover:border-amber-500/40 active:scale-[0.99] transition group flex flex-col justify-between gap-1.5 shadow-sm">
                     <div class="flex items-center justify-between">
                         <span class="text-[11px] font-bold text-cyan-400 tracking-wide">${item.badge}</span>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-[11px] text-slate-500 group-hover:text-amber-400 transition"></i>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-500 group-hover:text-amber-400 transition"></i>
                     </div>
                     <p class="text-xs sm:text-sm font-medium text-slate-200 group-hover:text-white leading-snug line-clamp-2">${item.question}</p>
                 </button>
@@ -917,11 +943,11 @@
         function setResponseMode(mode) {
             responseMode = mode;
             document.querySelectorAll(".mode-chip").forEach(btn => {
-                btn.className = "mode-chip px-3 py-1 rounded-full text-xs font-medium bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700 shrink-0 transition";
+                btn.className = "mode-chip px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-medium bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700 shrink-0 transition";
             });
             const active = document.getElementById(`mode-${mode}`);
             if (active) {
-                active.className = "mode-chip px-3 py-1 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/40 shrink-0 transition";
+                active.className = "mode-chip px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/40 shrink-0 transition";
             }
         }
 
@@ -947,11 +973,11 @@
 
             input.value = "";
             input.style.height = "auto";
+            input.blur(); // Dismiss mobile keyboard cleanly after sending
             await processUserQuestion(text);
         }
 
         async function processUserQuestion(userText) {
-            // Hide hero welcome once conversation starts
             document.getElementById("heroWelcome").classList.add("hidden");
 
             appendUserBubble(userText);
@@ -972,12 +998,12 @@
                 formatSuffix = "\n[Формат: Осы тақырып бойынша ҰБТ деңгейіндегі 5 тест сұрағын A, B, C, D нұсқаларымен және соңында дұрыс жауап кілтімен құрастырып бер.]";
             }
 
-            // Try calling Gemini API (tries environment key first if in Canvas, then USER_API_KEY)
             const keysToTry = apiKey ? [apiKey, USER_API_KEY] : [USER_API_KEY, ""];
 
             for (const keyCandidate of keysToTry) {
+                if (!keyCandidate) continue;
                 try {
-                    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${keyCandidate}`;
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${keyCandidate}`;
                     const payload = {
                         contents: [
                             ...conversationHistory.slice(-6),
@@ -1005,11 +1031,10 @@
                         }
                     }
                 } catch (err) {
-                    // Continue seamlessly to next key or built-in engine
+                    // Continue seamlessly to built-in engine
                 }
             }
 
-            // 100% Reliable Built-in Kazakhstan History AI Engine Fallback
             return generateFromBuiltInEngine(userText, mode);
         }
 
@@ -1039,7 +1064,6 @@
 
         function generateFromBuiltInEngine(query, mode) {
             const q = query.toLowerCase();
-            // Score each knowledge entry by keyword match
             let bestMatches = [];
             for (const entry of BUILTIN_KNOWLEDGE_BASE) {
                 let score = 0;
@@ -1067,7 +1091,6 @@
                 };
             }
 
-            // General overview response if question is broad
             return {
                 answer: `### 🇰🇿 Қазақстан тарихы бойынша зияткерлік талдау\n\nСіздің сұрағыңыз: **«${query}»**\n\nҚазақстан тарихы бірнеше ірі дәуірлерді қамтиды:\n- **Ежелгі дәуір:** Сақтар (б.з.б. VIII–III ғғ.), Үйсіндер, Қаңлылар және Ғұн империясы (Мөде шаньюй, Аттила).\n- **Түркі дәуірі мен Орта ғасырлар (VI–XV ғғ.):** Түрік, Түргеш, Қарлұқ, Қарахан, Қыпшақ мемлекеттері, Алтын Орда және Ақ Орда.\n- **Қазақ хандығы (1465–1847 жж.):** Керей мен Жәнібек хандардан бастап Қасым, Хақназар, Тәуекел, Есім, Жәңгір, Тәуке, Абылай және Кенесары хандар дәуірі.\n- **ХХ ғасырдағы Қазақстан:** 1916 ж. ұлт-азаттық көтеріліс, 1917 ж. «Алаш» қозғалысы, ҚазАКСР мен ҚазКСР құрылуы, Индустрияландыру, 1931–33 жж. Ашаршылық, 1937–38 жж. Қуғын-сүргін, Ұлы Отан соғысы, Тың игеру, Тоқырау және Қайта құру кезеңдері.\n- **Тәуелсіз Қазақстан:** 1986 ж. Желтоқсан оқиғасы, 1991 ж. 16 желтоқсанда Тәуелсіздік алу, ҚР Конституциясы, Теңге, Астана және халықаралық ұйымдар (БҰҰ, ЕҚЫҰ, ШЫҰ).\n\nТөмендегі батырмалардың бірін басып, нақты кезеңді тереңірек аша аласыз:`,
                 followUps: [
@@ -1086,7 +1109,7 @@
             const div = document.createElement("div");
             div.className = "flex justify-end";
             div.innerHTML = `
-                <div class="max-w-[85%] sm:max-w-[75%] bg-gradient-to-br from-amber-500 to-amber-400 text-slate-950 font-semibold rounded-2xl rounded-tr-sm px-4 py-3 text-xs sm:text-sm shadow-lg shadow-amber-500/10">
+                <div class="max-w-[88%] sm:max-w-[75%] bg-gradient-to-br from-amber-500 to-amber-400 text-slate-950 font-semibold rounded-2xl rounded-tr-sm px-4 py-2.5 sm:py-3 text-xs sm:text-sm shadow-lg shadow-amber-500/10 select-text">
                     ${escapeHtml(text)}
                 </div>
             `;
@@ -1097,7 +1120,7 @@
         function appendAIBubble(markdownText, followUps = []) {
             const stream = document.getElementById("messagesStream");
             const div = document.createElement("div");
-            div.className = "flex items-start gap-3";
+            div.className = "flex items-start gap-2.5 sm:gap-3";
 
             const followUpHtml = followUps.length > 0 ? `
                 <div class="mt-4 pt-3 border-t border-slate-800/80 space-y-2">
@@ -1106,7 +1129,7 @@
                     </span>
                     <div class="flex flex-wrap gap-1.5">
                         ${followUps.map(f => `
-                            <button onclick="askSuggestedPrompt('${escapeQuotes(f)}')"
+                            <button type="button" onclick="askSuggestedPrompt('${escapeQuotes(f)}')"
                                 class="text-left px-3 py-1.5 rounded-xl bg-slate-950/80 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-xs text-cyan-300 transition">
                                 ${escapeHtml(f)}
                             </button>
@@ -1116,15 +1139,15 @@
             ` : '';
 
             div.innerHTML = `
-                <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-amber-500/20 to-cyan-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400 shrink-0 mt-0.5 shadow-sm">
+                <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-500/20 to-cyan-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400 shrink-0 mt-0.5 shadow-sm">
                     <i class="fa-solid fa-landmark-dome text-xs"></i>
                 </div>
-                <div class="flex-1 min-w-0 bg-slate-900/90 border border-slate-800/90 rounded-2xl rounded-tl-sm p-4 sm:p-5 text-xs sm:text-sm text-slate-200 shadow-xl">
+                <div class="flex-1 min-w-0 bg-slate-900/90 border border-slate-800/90 rounded-2xl rounded-tl-sm p-3.5 sm:p-5 text-xs sm:text-sm text-slate-200 shadow-xl select-text">
                     <div class="ai-prose">${renderMarkdown(markdownText)}</div>
                     ${followUpHtml}
                     <div class="mt-3 pt-2.5 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-500">
-                        <span>Qazaq Tarih AI • Қазақстан тарихы сарапшысы</span>
-                        <button onclick="copyBubbleText(this)" class="text-slate-400 hover:text-amber-300 transition flex items-center gap-1">
+                        <span>Qazaq Tarih AI</span>
+                        <button type="button" onclick="copyBubbleText(this)" class="text-slate-400 hover:text-amber-300 transition flex items-center gap-1">
                             <i class="fa-regular fa-copy"></i> Көшіру
                         </button>
                     </div>
@@ -1139,12 +1162,12 @@
             const stream = document.getElementById("messagesStream");
             const div = document.createElement("div");
             div.id = id;
-            div.className = "flex items-center gap-3";
+            div.className = "flex items-center gap-2.5 sm:gap-3";
             div.innerHTML = `
-                <div class="w-9 h-9 rounded-2xl bg-amber-500/15 border border-amber-400/40 flex items-center justify-center text-amber-400 shrink-0">
+                <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-amber-500/15 border border-amber-400/40 flex items-center justify-center text-amber-400 shrink-0">
                     <i class="fa-solid fa-spinner fa-spin text-xs"></i>
                 </div>
-                <div class="bg-slate-900/80 border border-slate-800 rounded-2xl px-4 py-3 text-xs text-slate-300 flex items-center gap-2">
+                <div class="bg-slate-900/80 border border-slate-800 rounded-2xl px-4 py-2.5 sm:py-3 text-xs text-slate-300 flex items-center gap-2">
                     <span>Тарихи деректер сарапталуда...</span>
                 </div>
             `;
@@ -1160,7 +1183,9 @@
 
         function scrollChatToBottom() {
             const area = document.getElementById("chatScrollArea");
-            area.scrollTo({ top: area.scrollHeight, behavior: "smooth" });
+            if (area) {
+                area.scrollTo({ top: area.scrollHeight, behavior: "smooth" });
+            }
         }
 
         function copyBubbleText(btn) {
@@ -1186,7 +1211,7 @@
 
         function autoGrow(el) {
             el.style.height = "auto";
-            el.style.height = Math.min(el.scrollHeight, 130) + "px";
+            el.style.height = Math.min(el.scrollHeight, 110) + "px";
         }
 
         function toggleVoiceInput() {
@@ -1248,8 +1273,8 @@
                     }
 
                     return `
-                        <button onclick="selectQuizOption(${qIdx}, ${oIdx})" ${item.selected !== null ? 'disabled' : ''}
-                            class="w-full text-left p-3.5 rounded-xl border text-xs sm:text-sm transition flex items-center gap-3 ${cls}">
+                        <button type="button" onclick="selectQuizOption(${qIdx}, ${oIdx})" ${item.selected !== null ? 'disabled' : ''}
+                            class="w-full text-left p-3 sm:p-3.5 rounded-xl border text-xs sm:text-sm transition flex items-center gap-3 ${cls}">
                             <span class="w-6 h-6 rounded-lg bg-slate-900 flex items-center justify-center font-bold text-xs shrink-0">${letters[oIdx]}</span>
                             <span>${opt}</span>
                         </button>
@@ -1289,16 +1314,17 @@
         async function generateCustomAIQuiz() {
             const container = document.getElementById("quizCardsContainer");
             container.innerHTML = `
-                <div class="p-12 text-center bg-slate-900/80 border border-slate-800 rounded-2xl space-y-3">
+                <div class="p-10 sm:p-12 text-center bg-slate-900/80 border border-slate-800 rounded-2xl space-y-3">
                     <i class="fa-solid fa-wand-magic-sparkles fa-spin text-2xl text-amber-400"></i>
-                    <p class="text-sm text-slate-200 font-medium">ИИ Қазақстан тарихы бойынша жаңа ҰБТ тест сұрақтарын дайындауда...</p>
+                    <p class="text-xs sm:text-sm text-slate-200 font-medium">ИИ Қазақстан тарихы бойынша жаңа ҰБТ тест сұрақтарын дайындауда...</p>
                 </div>
             `;
 
             const keysToTry = apiKey ? [apiKey, USER_API_KEY] : [USER_API_KEY, ""];
             for (const keyCandidate of keysToTry) {
+                if (!keyCandidate) continue;
                 try {
-                    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${keyCandidate}`;
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${keyCandidate}`;
                     const payload = {
                         contents: [{
                             role: "user",
